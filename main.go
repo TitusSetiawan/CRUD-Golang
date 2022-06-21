@@ -48,6 +48,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	// log.Println(user[1].ID)
 	user[NewUser.ID] = NewUser
 	log.Println(user)
+	json.NewEncoder(w).Encode(user)
 }
 
 //PUT, Update
