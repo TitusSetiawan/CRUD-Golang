@@ -10,9 +10,9 @@ import (
 )
 
 type User struct {
-	ID   int
-	Name string
-	Div  string
+	ID     int
+	Nama   string
+	Divisi string
 }
 
 var user = map[int]User{}
@@ -44,7 +44,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	log.Println(NewUser) // for debug
+	// log.Println(NewUser) // for debug
 	// log.Println(user[1].ID)
 	user[NewUser.ID] = NewUser
 	log.Println(user)
@@ -65,28 +65,24 @@ func updateUserById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-
-	for _, item := range user {
-		if item.ID == queryId {
-			user[item.ID] = NewUser
-		}
-	}
+	NewUser.ID = queryId
+	user[queryId] = NewUser
 	json.NewEncoder(w).Encode(user)
 }
 
 func deleteUserById(w http.ResponseWriter, r *http.Request) {
-	var NewUser User
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&NewUser)
-	if err != nil {
-		panic(err.Error())
-	}
-
+	// var NewUser User
 	vars := mux.Vars(r)
 	queryId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		panic(err.Error())
 	}
+	// for _, item := range user {
+	// 	if item.ID == queryId {
+	// 		json.NewEncoder(w).Encode(item)
+	// 	}
+	// }
+
 	delete(user, queryId)
 	json.NewEncoder(w).Encode(user)
 }
